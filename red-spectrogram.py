@@ -11,14 +11,14 @@ import re
 class SpectrogramGenerator:
     def __init__(self, root):
         self.root = root
-        self.root.title("Spettrogram Generator v2.0")
+        self.root.title("RED-Spectrogram v1.0")
         self.root.geometry("700x500")
         self.root.configure(background="#f0f0f0")
-        self.root.resizable(True, True)
+        self.root.resizable(False, False)
         
         # Variabili
         self.selected_files = []
-        self.output_folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "Spectrograms")
+        self.output_folder = os.path.join(os.path.dirname(self.get_application_path()), "img")
         self.sox_path = self.find_sox_path()
         self.current_process = None
         self.config = self.load_config()
@@ -30,12 +30,41 @@ class SpectrogramGenerator:
         # Creazione dell'interfaccia
         self.create_ui()
     
+    def get_application_path(self):
+        """Ottiene il percorso dell'applicazione, funziona sia in modalità sviluppo che con PyInstaller"""
+        if getattr(sys, 'frozen', False):
+            # Se eseguito come bundle PyInstaller
+            return os.path.dirname(sys.executable)
+        else:
+            # Se eseguito in modalità sviluppo
+            return os.path.dirname(os.path.abspath(__file__))
+    
+    def resource_path(self, relative_path):
+        """Ottiene il percorso assoluto della risorsa, funziona sia in sviluppo che con PyInstaller"""
+        if getattr(sys, 'frozen', False):
+            # Se eseguito come bundle PyInstaller
+            base_path = getattr(sys, '_MEIPASS', os.path.dirname(sys.executable))
+        else:
+            # Se eseguito in modalità sviluppo
+            base_path = os.path.dirname(os.path.abspath(__file__))
+        return os.path.join(base_path, relative_path)
+    
     def find_sox_path(self):
-        """Cerca il percorso dell'eseguibile SoX"""
+        """Cerca il percorso dell'eseguibile SoX compatibile con PyInstaller"""
+        # Prima cerca nel bundle PyInstaller
+        if getattr(sys, 'frozen', False):
+            # Se eseguito come bundle PyInstaller, cerca sox.exe nel bundle
+            sox_bundled = self.resource_path("sox.exe")
+            if os.path.exists(sox_bundled):
+                return sox_bundled
+        
+        # Percorsi predefiniti del sistema
         default_paths = [
-            r"C:\Program Files\sox-14-4-2\sox.exe",
-            r"C:\Program Files (x86)\sox-14-4-2\sox.exe",
-            r"C:\sox-14-4-2\sox.exe"
+            r"sox\sox.exe",
+            r"C:\Program Files\sox-14.4.2\sox.exe",
+            r"C:\Program Files (x86)\sox-14.4.2\sox.exe",
+            r"C:\sox-14.4.2\sox.exe",
+            self.resource_path("sox.exe")  # Cerca nel percorso relativo
         ]
         
         # Controlla i percorsi predefiniti
@@ -43,7 +72,7 @@ class SpectrogramGenerator:
             if os.path.exists(path):
                 return path
         
-        # Altrimenti, cerca in PATH
+        # Cerca in PATH se non in bundle
         if sys.platform == "win32":
             cmd = "where sox"
         else:
@@ -62,10 +91,18 @@ class SpectrogramGenerator:
     def load_config(self):
         """Carica o crea il file di configurazione"""
         config = configparser.ConfigParser()
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "spectrogram_config.ini")
+        config_file = os.path.join(self.get_application_path(), "spectrogram_config.ini")
+        
+        # Controlla se il file di configurazione esiste nel bundle
+        bundled_config = self.resource_path("spectrogram_config.ini")
         
         if os.path.exists(config_file):
             config.read(config_file)
+        elif os.path.exists(bundled_config) and getattr(sys, 'frozen', False):
+            config.read(bundled_config)
+            # Salva il file nella directory dell'app
+            with open(config_file, "w") as f:
+                config.write(f)
         else:
             # Configurazione predefinita
             config["DEFAULT"] = {
@@ -93,7 +130,7 @@ class SpectrogramGenerator:
     
     def save_config(self):
         """Salva le impostazioni attuali nel file di configurazione"""
-        config_file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "spectrogram_config.ini")
+        config_file = os.path.join(self.get_application_path(), "spectrogram_config.ini")
         
         # Aggiorna il config con i valori attuali
         self.config["DEFAULT"]["width"] = self.width_var.get()
@@ -272,8 +309,21 @@ class SpectrogramGenerator:
         ttk.Button(button_frame, text="Salva Impostazioni", command=self.save_settings).pack(side=tk.LEFT, padx=5)
         ttk.Button(button_frame, text="Ripristina Predefiniti", command=self.reset_settings).pack(side=tk.LEFT, padx=5)
         
+        # Verifica SoX e mostra avviso se necessario
+        self.check_sox_available()
+        
         # Inizializza stato
         self.refresh_output_list()
+    
+    def check_sox_available(self):
+        """Verifica se SoX è disponibile e mostra avviso se necessario"""
+        if not self.sox_path:
+            messagebox.showwarning(
+                "SoX non trovato", 
+                "SoX non è stato trovato nel sistema. È necessario per generare gli spettrogrammi.\n\n"
+                "Se hai SoX installato, specifica manualmente il percorso nelle impostazioni.\n"
+                "Se non hai SoX, scaricalo da https://sourceforge.net/projects/sox/."
+            )
     
     def browse_files(self):
         """Apre il dialogo per selezionare file"""

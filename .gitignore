@@ -1,2 +1,7 @@
 spectrogram_config.ini
 sox-14.4.2
+.venv
+.qodo
+build
+dist
+sox
