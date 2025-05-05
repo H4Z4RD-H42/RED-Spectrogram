@@ -5,3 +5,4 @@ sox-14.4.2
 build
 dist
 sox
+path.py
