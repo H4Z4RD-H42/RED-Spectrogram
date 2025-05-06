@@ -3,7 +3,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-2.0-green.svg)
 
-A powerful desktop application for generating high-quality spectrograms from FLAC audio files. The application provides an intuitive graphical interface for audio analysis while leveraging SoX (Sound eXchange) for processing.
+A desktop application for generating high-quality spectrograms from FLAC audio files. The application provides an intuitive graphical interface for audio analysis while leveraging SoX (Sound eXchange) for processing.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/2e73cee1-60e7-417f-942f-d2622e43a861"
@@ -28,7 +28,7 @@ A powerful desktop application for generating high-quality spectrograms from FLA
 
 ### Standalone Executable
 
-Download the latest release from the [Releases]([https://github.com/yourusername/spectrogram-generator/](https://github.com/H4Z4RD-H42/RED-Spectrogram/releases) page and run the executable.
+Download the latest release from the [Releases](https://github.com/H4Z4RD-H42/RED-Spectrogram/releases) page and run the executable.
 
 ### From Source
 
@@ -70,7 +70,7 @@ python red-spectrogram.py
 | Parameter | Description | Typical Range |
 |-----------|-------------|---------------|
 | Width | Width of the spectrogram in pixels | 500-5000 |
-| Height | Height of the spectrogram in pixels | 500-2000 |
+| Height (bins) | Height of the spectrogram in bins | 129, 257, 513, 1025 (2^n+1) |
 | Z-Range | Dynamic range in dB | 80-120 |
 | Window Type | FFT window function | Kaiser, Hamming, Hann, etc. |
 | Zoom Start | Starting point for zoom (M:SS) | Depends on audio |
@@ -89,7 +89,7 @@ venv\Scripts\activate  # On Windows
 pip install pillow configparser pyinstaller
 
 # Create the executable
-pyinstaller --onefile --windowed red-spectrogram.py
+pyinstaller red-spectrogram.spec
 ```
 
 The executable will be created in the `dist` folder.
