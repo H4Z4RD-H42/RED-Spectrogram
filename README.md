@@ -28,7 +28,7 @@ A desktop application for generating high-quality spectrograms from FLAC audio f
 
 ### Standalone Executable
 
-Download the latest release from the [Releases]([https://github.com/yourusername/spectrogram-generator/](https://github.com/H4Z4RD-H42/RED-Spectrogram/releases) page and run the executable.
+Download the latest release from the [Releases](https://github.com/H4Z4RD-H42/RED-Spectrogram/releases) page and run the executable.
 
 ### From Source
 
