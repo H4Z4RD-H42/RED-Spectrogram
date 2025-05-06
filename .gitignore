@@ -1,6 +1,7 @@
 spectrogram_config.ini
 sox
 Spectrograms
+RED-Spectrogram
 .venv
 .qodo
 build
