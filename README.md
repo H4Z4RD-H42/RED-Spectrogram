@@ -70,7 +70,7 @@ python red-spectrogram.py
 | Parameter | Description | Typical Range |
 |-----------|-------------|---------------|
 | Width | Width of the spectrogram in pixels | 500-5000 |
-| Height | Height of the spectrogram in pixels | 500-2000 |
+| Height (bins) | Height of the spectrogram in bins | 129, 257, 513, 1025 (2^n+1) |
 | Z-Range | Dynamic range in dB | 80-120 |
 | Window Type | FFT window function | Kaiser, Hamming, Hann, etc. |
 | Zoom Start | Starting point for zoom (M:SS) | Depends on audio |
