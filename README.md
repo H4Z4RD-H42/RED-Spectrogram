@@ -3,11 +3,11 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-2.0-green.svg)
 
-A powerful and user-friendly desktop application for generating high-quality spectrograms from FLAC audio files. The application leverages SoX (Sound eXchange) for audio processing while providing an intuitive graphical interface.
+A powerful desktop application for generating high-quality spectrograms from FLAC audio files. The application provides an intuitive graphical interface for audio analysis while leveraging SoX (Sound eXchange) for processing.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/93f25a32-b9c2-4c8f-b4d1-9e55d42ececd"
-  alt="Spectrogram Generator Screenshot" />
+  alt="Spectrogram Screenshot" />
 </p>
 
 ## Features
@@ -19,26 +19,22 @@ A powerful and user-friendly desktop application for generating high-quality spe
 - 📂 Folder scan for FLAC files
 - 💾 Save and load configuration settings
 - 🖼️ Direct preview of generated spectrograms
-- 📱 Portable application - no installation required
+- 📱 Portable application
 
 ## Installation
 
 ### Standalone Executable
 
-Simply download the latest release and run the executable. No installation required!
-
-1. Download `SpectrogramGenerator.exe` from the [Releases](https://github.com/yourusername/spectrogram-generator/releases) page
-2. Run the application
-3. That's it! No dependencies needed as SoX is bundled with the application
+Download the latest release from the [Releases]([https://github.com/yourusername/spectrogram-generator/](https://github.com/H4Z4RD-H42/RED-Spectrogram/releases) page and run the executable.
 
 ### From Source
 
-If you prefer to run from source:
+For running from source:
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/spectrogram-generator.git
-cd spectrogram-generator
+git clone https://github.com/H4Z4RD-H42/RED-Spectrogram.git
+cd RED-Spectrogram
 
 # Create and activate virtual environment
 python -m venv venv
@@ -49,17 +45,17 @@ venv\Scripts\activate  # On Windows
 pip install pillow configparser
 
 # Run the application
-python spectrogram_generator.py
+python red-spectrogram.py
 ```
 
-**Note**: If running from source, you need to have SoX installed and available in your PATH.
+**Note**: Running from source requires SoX to be installed and available in your PATH.
 
 ## Usage
 
-1. **Add Files**: Click "Add Files" to select FLAC files or "Add Folder" to scan a directory for FLAC files
-2. **Configure Settings**: Switch to the "Settings" tab to customize spectrogram parameters
-3. **Generate Spectrograms**: Select the type of spectrogram (Full/Zoom) and click "Generate Spectrograms"
-4. **View Results**: Generated spectrograms appear in the Output section and can be opened with a double-click
+1. **Add Files**: Select FLAC files or scan a directory for FLAC files
+2. **Configure Settings**: Customize spectrogram parameters in the Settings tab
+3. **Generate Spectrograms**: Select spectrogram type (Full/Zoom) and generate
+4. **View Results**: Open generated spectrograms from the Output section
 
 ### Spectrogram Types
 
@@ -90,7 +86,7 @@ venv\Scripts\activate  # On Windows
 pip install pillow configparser pyinstaller
 
 # Create the executable
-pyinstaller --onefile --windowed --add-binary "path\to\sox.exe;." --add-binary "path\to\sox\*.dll;." spectrogram_generator.py
+pyinstaller --onefile --windowed red-spectrogram.py
 ```
 
 The executable will be created in the `dist` folder.
@@ -120,5 +116,5 @@ This project is licensed under the MIT License - see the LICENSE file for detail
 
 ## Acknowledgments
 
-- [SoX - Sound eXchange](https://sourceforge.net/projects/sox/) for the powerful audio processing capabilities
+- [SoX - Sound eXchange](https://sourceforge.net/projects/sox/) for the audio processing capabilities
 - All contributors and users of this software
