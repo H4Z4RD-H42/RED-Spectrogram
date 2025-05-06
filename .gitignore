@@ -1,5 +1,6 @@
 spectrogram_config.ini
-sox-14.4.2
+sox
+Spectrograms
 .venv
 .qodo
 build
