@@ -6,11 +6,11 @@
 A powerful desktop application for generating high-quality spectrograms from FLAC audio files. The application provides an intuitive graphical interface for audio analysis while leveraging SoX (Sound eXchange) for processing.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/93f25a32-b9c2-4c8f-b4d1-9e55d42ececd"
-  alt="Spectrogram screenshot" />
   <img src="https://github.com/user-attachments/assets/2e73cee1-60e7-417f-942f-d2622e43a861"
   alt="RED-Spectrogram interface" />
-
+  <img src="https://github.com/user-attachments/assets/93f25a32-b9c2-4c8f-b4d1-9e55d42ececd"
+  alt="Spectrogram screenshot" />
+  
 </p>
 
 ## Features
