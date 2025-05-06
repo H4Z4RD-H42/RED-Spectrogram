@@ -3,7 +3,7 @@
 ![License](https://img.shields.io/badge/license-MIT-blue.svg)
 ![Version](https://img.shields.io/badge/version-2.0-green.svg)
 
-A powerful desktop application for generating high-quality spectrograms from FLAC audio files. The application provides an intuitive graphical interface for audio analysis while leveraging SoX (Sound eXchange) for processing.
+A desktop application for generating high-quality spectrograms from FLAC audio files. The application provides an intuitive graphical interface for audio analysis while leveraging SoX (Sound eXchange) for processing.
 
 <p align="center">
   <img src="https://github.com/user-attachments/assets/2e73cee1-60e7-417f-942f-d2622e43a861"
