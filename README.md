@@ -89,7 +89,7 @@ venv\Scripts\activate  # On Windows
 pip install pillow configparser pyinstaller
 
 # Create the executable
-pyinstaller red-spectrogram.spec
+pyinstaller --noconsole --onefile --windowed red-spectrogram.spec
 ```
 
 The executable will be created in the `dist` folder.
