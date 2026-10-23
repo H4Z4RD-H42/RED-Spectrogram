@@ -1,11 +1,30 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+.ruff_cache/
+
+# Build output
+build/
+dist/
+release/
+/RED-Spectrogram.exe
+
+# sox_ng binary (download it with: python tools/fetch_sox_ng.py)
+sox/
+
+# Files the app creates at runtime
 spectrogram_config.ini
-sox
-Spectrograms
-RED-Spectrogram
-.venv
-.qodo
-build
-dist
-sox
-path.py
-RED-Spectrogram.exe
+red-spectrogram.log*
+Spectrograms/
+
+# Local test material
+materiale/
+
+# Editors and tools
+.vscode/
+.idea/
+.qodo/

@@ -1,0 +1,64 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "red-spectrogram"
+dynamic = ["version"]
+description = "Desktop app to generate spectrograms from lossless audio files (FLAC, WAV, AIFF) with sox_ng/SoX."
+readme = "README.md"
+license = "MIT"
+license-files = ["LICENSE"]
+authors = [{ name = "H4Z4RD-H42" }]
+requires-python = ">=3.10"
+dependencies = [
+    "ttkbootstrap>=2.0,<3",
+    "pillow>=10",
+]
+keywords = ["spectrogram", "audio", "flac", "sox", "sox_ng", "lossless", "audio-analysis"]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Environment :: Win32 (MS Windows)",
+    "Environment :: X11 Applications",
+    "Intended Audience :: End Users/Desktop",
+    "Operating System :: Microsoft :: Windows",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Topic :: Multimedia :: Sound/Audio :: Analysis",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8",
+    "pyinstaller>=6",
+    "ruff>=0.6",
+]
+
+[project.urls]
+Homepage = "https://github.com/H4Z4RD-H42/RED-Spectrogram"
+Releases = "https://github.com/H4Z4RD-H42/RED-Spectrogram/releases"
+Issues = "https://github.com/H4Z4RD-H42/RED-Spectrogram/issues"
+Changelog = "https://github.com/H4Z4RD-H42/RED-Spectrogram/blob/main/CHANGELOG.md"
+
+[project.gui-scripts]
+red-spectrogram = "red_spectrogram.app:main"
+
+[tool.setuptools]
+packages = ["red_spectrogram"]
+
+[tool.setuptools.dynamic]
+version = { attr = "red_spectrogram.__version__" }
+
+[tool.setuptools.package-data]
+red_spectrogram = ["assets/*.png"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 140
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "B", "UP"]
+ignore = ["E501", "B905"]
