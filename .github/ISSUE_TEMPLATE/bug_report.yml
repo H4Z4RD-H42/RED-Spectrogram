@@ -1,0 +1,50 @@
+name: Bug report
+description: Something doesn't work as expected
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for reporting a problem! Please fill in as much as you can.
+  - type: textarea
+    id: what-happened
+    attributes:
+      label: What happened?
+      description: What did you do, what did you expect, and what happened instead?
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to reproduce
+      placeholder: |
+        1. Add a FLAC file
+        2. Enable "Zoomed Spectrogram"
+        3. Click "Generate Spectrograms"
+  - type: input
+    id: version
+    attributes:
+      label: RED-Spectrogram version
+      description: Shown in the window title and in Help → About.
+      placeholder: "3.0.0"
+    validations:
+      required: true
+  - type: dropdown
+    id: install
+    attributes:
+      label: How do you run it?
+      options:
+        - Windows download (.exe)
+        - From source
+    validations:
+      required: true
+  - type: input
+    id: os
+    attributes:
+      label: Operating system
+      placeholder: Windows 11 23H2
+  - type: textarea
+    id: log
+    attributes:
+      label: Log file
+      description: Help → Open Log File, then paste the relevant lines (you can remove file names you don't want to share).
+      render: text

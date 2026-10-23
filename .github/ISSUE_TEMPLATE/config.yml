@@ -1,0 +1,5 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Security vulnerability
+    url: https://github.com/H4Z4RD-H42/RED-Spectrogram/security/advisories/new
+    about: Please report security problems privately.
