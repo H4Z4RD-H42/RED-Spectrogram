@@ -66,9 +66,20 @@ That's it: sox_ng is already included in the `sox` folder.
 1. **Add files** — click **Add Files** or **Add Folder** to pick FLAC/WAV/AIFF files.
 2. **Choose the type** — *Full Spectrogram*, *Zoomed Spectrogram*, or both.
 3. **Generate** — click **Generate Spectrograms**. The progress bar shows where you are.
-4. **View** — double-click a result in the **Output** list, or click **Open Output Folder**.
+4. **View** — the **Output** list shows the images from the latest run: double-click one to open it,
+   or click **Open Output Folder** to see everything you have generated.
 
 Each spectrogram is saved as a PNG named after the source file, e.g. `track.flac_full.png` and `track.flac_zoom.png`.
+Files added one by one go straight into the output folder; files added with **Add Folder** get a subfolder
+with the same name as their source folder, so each album stays together:
+
+```text
+Spectrograms/
+├── single track.flac_full.png
+└── My Album/
+    ├── 01 - Intro.flac_full.png
+    └── 02 - Song.flac_full.png
+```
 
 <details>
 <summary><b>Settings reference</b></summary>

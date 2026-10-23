@@ -5,6 +5,7 @@ without manual testing.
 """
 
 import os
+import shutil
 
 import pytest
 import ttkbootstrap as tb
@@ -38,8 +39,8 @@ def app_window(tmp_path_factory, sox_ng_path):
 @pytest.fixture(autouse=True)
 def _reset_app_state(app_window):
     """Reset the shared state to a clean point before each test."""
-    app_window.selected_files = []
-    app_window.file_listbox.delete(0, "end")
+    app_window.clear_files()
+    app_window.clear_output_list()
     app_window.width_var.set(app_window.config.full.width)
     yield
 
@@ -93,10 +94,88 @@ def test_generate_full_spectrogram_end_to_end(app_window, sample_wav, tmp_path):
     app_window.output_folder = str(tmp_path)
     file_name = os.path.basename(sample_wav)
 
-    app_window._generate_full(sample_wav, file_name)
+    output_path = app_window._generate_full(sample_wav, file_name, str(tmp_path))
 
-    output_path = os.path.join(str(tmp_path), f"{file_name}_full.png")
+    assert output_path == os.path.join(str(tmp_path), f"{file_name}_full.png")
     assert os.path.exists(output_path)
+
+
+def _make_album(root, name, tracks=("01.wav", "02.wav"), source=None):
+    folder = root / name
+    folder.mkdir(parents=True)
+    for track in tracks:
+        shutil.copy(source, folder / track)
+    (folder / "cover.jpg").write_text("not audio")
+    return str(folder)
+
+
+def test_add_folder_maps_files_to_subfolder_named_after_it(app_window, sample_wav, tmp_path):
+    album = _make_album(tmp_path, "My Album", source=sample_wav)
+
+    app_window.add_folder(album)
+
+    assert len(app_window.selected_files) == 2  # cover.jpg ignored
+    for path in app_window.selected_files:
+        assert app_window.output_dir_for(path) == os.path.join(app_window.output_folder, "My Album")
+
+
+def test_single_files_go_to_output_root(app_window, sample_wav):
+    app_window.add_files([sample_wav])
+
+    assert app_window.output_dir_for(sample_wav) == app_window.output_folder
+
+
+def test_same_folder_name_from_different_parents_gets_unique_subfolder(app_window, sample_wav, tmp_path):
+    first = _make_album(tmp_path / "Album A", "CD1", source=sample_wav)
+    second = _make_album(tmp_path / "Album B", "CD1", source=sample_wav)
+
+    app_window.add_folder(first)
+    app_window.add_folder(second)
+    app_window.add_folder(first)  # adding the same folder again changes nothing
+
+    dirs = {os.path.basename(app_window.output_dir_for(p)) for p in app_window.selected_files}
+    assert dirs == {"CD1", "CD1 (2)"}
+    assert len(app_window.selected_files) == 4
+
+
+def test_removing_files_frees_their_subfolder_mapping(app_window, sample_wav, tmp_path):
+    app_window.add_folder(_make_album(tmp_path, "Album", source=sample_wav))
+
+    app_window.file_listbox.selection_set(0, "end")
+    app_window.remove_selected()
+
+    assert app_window.output_subdirs == {}
+
+
+def test_generation_writes_folder_inputs_to_subfolder_and_lists_them(app_window, sample_wav, tmp_path, monkeypatch):
+    monkeypatch.setattr("red_spectrogram.app.messagebox.showinfo", lambda *a, **k: None)
+    app_window.output_folder = str(tmp_path / "out")
+    app_window.add_folder(_make_album(tmp_path, "Album", tracks=("01.wav",), source=sample_wav))
+    app_window.add_files([sample_wav])
+    app_window.add_output("stale result from a previous run.png")
+
+    jobs = [(p, app_window.output_dir_for(p)) for p in app_window.selected_files]
+    app_window.clear_output_list()
+    app_window.generate_spectrograms(jobs)
+    app_window.process_queue()
+
+    assert os.path.exists(tmp_path / "out" / "Album" / "01.wav_full.png")
+    assert os.path.exists(tmp_path / "out" / "test_tone.wav_full.png")
+    assert list(app_window.output_listbox.get(0, "end")) == ["Album/01.wav_full.png", "test_tone.wav_full.png"]
+
+
+def test_start_generation_clears_previous_output_list(app_window, sample_wav, monkeypatch):
+    started = []
+    monkeypatch.setattr("red_spectrogram.app.threading.Thread", lambda **kw: type("T", (), {"start": lambda self: started.append(kw)})())
+    monkeypatch.setattr(app_window.root, "after", lambda *a, **k: None)
+    app_window.add_files([sample_wav])
+    app_window.add_output("old.png")
+
+    app_window.start_generation()
+
+    assert len(started) == 1
+    assert app_window.output_listbox.size() == 0
+    assert app_window.output_files == []
 
 
 def test_start_generation_warns_when_no_files_selected(app_window, monkeypatch):
