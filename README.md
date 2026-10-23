@@ -23,20 +23,6 @@
 
 </div>
 
-## Why RED-Spectrogram?
-
-A FLAC file is only as good as its source. When a lossy file (MP3, AAC…) is converted to FLAC,
-the file *looks* lossless but the high frequencies thrown away by the lossy encoder are gone for good.
-A spectrogram makes this visible instantly:
-
-| Genuine lossless | Lossy transcode |
-|:---:|:---:|
-| ![Spectrogram of a genuine lossless file, with content up to 22 kHz](docs/images/example-lossless.png) | ![Spectrogram of a transcoded file, with a hard cutoff at 16 kHz](docs/images/example-transcode.png) |
-| Content all the way up to 22 kHz | Hard cutoff at ~16 kHz: a sign of a lossy source |
-
-RED-Spectrogram wraps the excellent [sox_ng](https://codeberg.org/sox_ng/sox_ng) in a simple desktop
-app, so you can check whole albums in a couple of clicks instead of typing SoX commands.
-
 ## Features
 
 - 📊 **Full and zoomed spectrograms** — see the whole track, or a few seconds in fine detail
@@ -44,7 +30,6 @@ app, so you can check whole albums in a couple of clicks instead of typing SoX c
 - 📁 **Batch processing** — add many files at once or scan a whole folder
 - 🎛️ **Tunable output** — width, height, dynamic range, gain and FFT window type
 - 🎨 **Light and dark themes**
-- 💾 **Remembers your settings** between sessions
 - 📦 **Portable** — no installation, sox_ng included, runs from any folder or USB stick
 
 ## Download
@@ -104,16 +89,6 @@ Click **Save Settings** to keep your changes, or **Reset to Defaults** to start 
 
 </details>
 
-<details>
-<summary><b>Example: zoomed spectrogram</b></summary>
-<br />
-
-A zoomed spectrogram covers just a few seconds, with more frequency detail:
-
-<img src="docs/images/example-zoom.png" alt="Zoomed spectrogram covering two seconds" width="400" />
-
-</details>
-
 ## FAQ
 
 <details>
@@ -138,7 +113,6 @@ on your computer. You can also download sox_ng from **Help → Download sox_ng**
 <summary><b>Can it open MP3, ALAC or APE files?</b></summary>
 
 No. The app is meant for checking lossless files, and sox_ng cannot decode ALAC or APE without extra libraries.
-Convert them to FLAC or WAV first.
 </details>
 
 <details>
@@ -185,4 +159,3 @@ The Windows download bundles sox_ng, which is licensed under the GNU GPL v2; see
 
 - [sox_ng](https://codeberg.org/sox_ng/sox_ng) and the original [SoX](https://sourceforge.net/projects/sox/) for doing the actual audio processing
 - [ttkbootstrap](https://github.com/israel-dryer/ttkbootstrap) for the modern Tkinter themes
-- [@mid-ff-play19](https://github.com/mid-ff-play19) for the feature requests that shaped version 3.0
