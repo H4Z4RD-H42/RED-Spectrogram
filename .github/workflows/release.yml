@@ -1,0 +1,80 @@
+name: Release
+
+# Publishing a release:
+#   1. bump __version__ in red_spectrogram/__init__.py
+#   2. move the "Unreleased" entries in CHANGELOG.md under the new version
+#   3. commit, then: git tag v3.0.0 && git push origin main v3.0.0
+
+on:
+  push:
+    tags: ["v*.*.*"]
+
+permissions:
+  contents: write
+  id-token: write
+  attestations: write
+
+jobs:
+  release:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Install dependencies
+        run: python -m pip install -e ".[dev]"
+
+      - name: Check that the tag matches the app version
+        shell: bash
+        run: |
+          version=$(python -c "import red_spectrogram; print(red_spectrogram.__version__)")
+          if [ "v$version" != "$GITHUB_REF_NAME" ]; then
+            echo "::error::Tag $GITHUB_REF_NAME does not match __version__ ($version)"
+            exit 1
+          fi
+
+      - name: Download sox_ng (binary + source for GPL compliance)
+        run: python tools/fetch_sox_ng.py --source release
+
+      - name: Run tests
+        run: pytest -q
+
+      - name: Build executable
+        run: pyinstaller --noconfirm RED-Spectrogram.spec
+
+      - name: Package
+        run: python tools/package_release.py ${{ github.ref_name }}
+
+      - name: Checksums
+        shell: bash
+        working-directory: release
+        run: sha256sum *.zip *.tar.gz > SHA256SUMS.txt
+
+      - name: Attest build provenance
+        uses: actions/attest-build-provenance@v2
+        with:
+          subject-path: |
+            release/*.zip
+            dist/RED-Spectrogram.exe
+
+      - name: Release notes
+        shell: bash
+        run: |
+          {
+            cat .github/release-notes-header.md
+            echo
+            python tools/changelog_section.py "${GITHUB_REF_NAME#v}"
+          } > release-notes.md
+
+      - name: Publish GitHub release
+        shell: bash
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create "$GITHUB_REF_NAME" release/* \
+            --title "RED-Spectrogram $GITHUB_REF_NAME" \
+            --notes-file release-notes.md
